@@ -1,0 +1,6 @@
+Программа, реализующая функционал работы пикового детектора. АЦП работает в режиме кольцевого DMA. 
+Когда импульс заканчивается, в порт выводится значение минимального и максимального уровней для данного импульса. 
+
+
+The program that implements the functionality of the peak detector. 
+The ADC operates in DMA ring mode. When the value ends, the value of the minimum and full levels for a given 
