@@ -85,7 +85,8 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN 0 */
 volatile uint32_t max_adc = 0;
 volatile uint32_t adc_res;
-volatile uint32_t ready_status;
+volatile uint32_t ready_status = 0;
+volatile uint32_t down_trend = 0;
 /* USER CODE END 0 */
 
 /**
@@ -121,7 +122,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  ready_status = 0;
+  //ready_status = 0;
 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc_res, 1);
 char buf[20];
   /* USER CODE END 2 */
@@ -136,6 +137,7 @@ char buf[20];
           HAL_UART_Transmit(&huart2, (uint8_t*)buf, sprintf(buf, "%d \r\n", max_adc),1000);
           max_adc = 0;
           ready_status = 0;
+          down_trend = 0;
           HAL_GPIO_WritePin(GPIOE,GPIO_PIN_2,GPIO_PIN_RESET);
       }
       

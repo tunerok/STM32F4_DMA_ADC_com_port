@@ -77,6 +77,8 @@ extern volatile uint32_t adc_res;
 extern volatile uint32_t max_adc;
 extern volatile uint32_t ready_status;
 
+extern volatile uint32_t down_trend;
+
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -224,9 +226,14 @@ void DMA2_Stream0_IRQHandler(void)
     if ((adc_res > max_adc)&&(adc_res > NOISE_LVL))
     {
         max_adc = adc_res;
+        down_trend = 0;
     }
-    if((adc_res < NOISE_LVL)&&(max_adc > NOISE_LVL)){
-        ready_status = 1;
+    else if((adc_res < max_adc)&&(adc_res > NOISE_LVL)){
+        down_trend++;
+    }
+    
+    if (down_trend > 2){
+      ready_status = 1;
     }
   /* USER CODE END DMA2_Stream0_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc1);
