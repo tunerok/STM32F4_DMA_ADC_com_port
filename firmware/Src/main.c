@@ -87,6 +87,7 @@ volatile uint32_t max_adc = 0;
 volatile uint32_t adc_res;
 volatile uint32_t ready_status = 0;
 volatile uint32_t down_trend = 0;
+volatile uint32_t up_trend = 0;
 /* USER CODE END 0 */
 
 /**
@@ -138,6 +139,7 @@ char buf[20];
           max_adc = 0;
           ready_status = 0;
           down_trend = 0;
+          up_trend = 0;
           HAL_GPIO_WritePin(GPIOE,GPIO_PIN_2,GPIO_PIN_RESET);
       }
       

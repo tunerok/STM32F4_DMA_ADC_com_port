@@ -31,6 +31,9 @@
   *
   ******************************************************************************
   */
+  
+  #define UP_COUNT 2
+  #define DOWN_COUNT 2
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -78,6 +81,7 @@ extern volatile uint32_t max_adc;
 extern volatile uint32_t ready_status;
 
 extern volatile uint32_t down_trend;
+extern volatile uint32_t up_trend;
 
 /* USER CODE END EV */
 
@@ -223,18 +227,29 @@ void SysTick_Handler(void)
 void DMA2_Stream0_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
+    
+    
     if ((adc_res > max_adc)&&(adc_res > NOISE_LVL))
     {
         max_adc = adc_res;
         down_trend = 0;
+        up_trend++;
+        
     }
     else if((adc_res < max_adc)&&(adc_res > NOISE_LVL)){
         down_trend++;
+        up_trend++;
     }
     
-    if (down_trend > 2){
-      ready_status = 1;
+    if((adc_res < NOISE_LVL)&&(up_trend > UP_COUNT)){
+        up_trend = 0;
     }
+    
+    if ((down_trend > DOWN_COUNT)&&(up_trend > UP_COUNT)){
+            ready_status = 1;
+    }
+    
+    
   /* USER CODE END DMA2_Stream0_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc1);
   /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
